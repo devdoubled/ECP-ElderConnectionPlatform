@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ElderConnectionPlatform.API.Controllers
 {
-    [Route("api/servicetypes")]
+    [Route("api/service-types")]
     [ApiController]
     public class ServiceTypeController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         #region Get Service Type By Id
-        [HttpGet("get-service-type/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceTypeById(int id)
         {
             var result = await _serviceTypeService.GetServiceTypeByIdAsync(id);

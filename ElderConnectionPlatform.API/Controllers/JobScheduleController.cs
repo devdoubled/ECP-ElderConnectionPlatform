@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ElderConnectionPlatform.API.Controllers
 {
-    [Route("api/jobschedules")]
+    [Route("api/job-schedules")]
     [ApiController]
     public class JobScheduleController : ControllerBase
     {
@@ -27,14 +27,14 @@ namespace ElderConnectionPlatform.API.Controllers
         //    return Ok(jobSchedules);
         //}
 
-        [HttpGet("get-all-job-schedule")]
+        [HttpGet("")]
         public async Task<IActionResult> GetAllTrainingProgramAsync(int pageIndex = 0, int pageSize = 10)
         {
             var result = await _jobScheduleService.GetAllJobScheduleAsync(pageIndex, pageSize);
             return Ok(result);
         }
 
-        [HttpGet("get-job-schedule/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<JobScheduleViewModel>> GetJobScheduleById(int id)
         {
             var jobSchedule = await _jobScheduleService.GetJobScheduleByIdAsync(id);
@@ -45,12 +45,12 @@ namespace ElderConnectionPlatform.API.Controllers
             return Ok(jobSchedule);
         }
 
-        [HttpGet("get-job-schedule-by-connector-id/{connectorId}")]
+        [HttpGet("by-connector/{id}")]
         public async Task<IActionResult> GetAllJobScheduleByConnectorId
-            (string connectorId, int pageIndex = 0, int pageSize = 10)
+            (string id, int pageIndex = 0, int pageSize = 10)
         {
             var jobSchedule = await _jobScheduleService.GetJobScheduleByConnectorIdAsync
-                (connectorId, pageIndex, pageSize);
+                (id, pageIndex, pageSize);
 
             return jobSchedule == null
                ? NotFound()
@@ -58,7 +58,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         }
 
-        [HttpGet("get-job-schedule-task-progress/{id}")]
+        [HttpGet("task-progress/{id}")]
         public async Task<IActionResult> GetJobScheduleTaskProgress(int id)
         {
             var jobSchedule = await _jobScheduleService.GetJobScheduleProcessAsync(id);

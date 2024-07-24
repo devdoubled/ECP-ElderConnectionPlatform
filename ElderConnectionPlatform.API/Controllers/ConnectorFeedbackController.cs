@@ -23,10 +23,10 @@ namespace ElderConnectionPlatform.API.Controllers
 		//	return StatusCode(response.Status, response);
 		//}
 
-		[HttpGet("{connectorId}")]
-		public async Task<IActionResult> GetFeedbackViewModelAsync(string connectorId, int pageIndex = 0, int pageSize = 10)
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetFeedbackViewModelAsync(string id, int pageIndex = 0, int pageSize = 10)
 		{
-			var response = await _connectorFeedbackService.GetFeedbackViewModelPaginationAsync(connectorId, pageIndex, pageSize);
+			var response = await _connectorFeedbackService.GetFeedbackViewModelPaginationAsync(id, pageIndex, pageSize);
 			return StatusCode(response.Status, response);
 		}
 

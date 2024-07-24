@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ElderConnectionPlatform.API.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/elder-infos")]
 	[ApiController]
 	public class ElderInformationController : ControllerBase
 	{
@@ -17,16 +17,16 @@ namespace ElderConnectionPlatform.API.Controllers
 		}
 
 		#region Get Elder Information by Child Id
-		[HttpGet("get-elder-information-by-child/{childId}")]
-		public async Task<IActionResult> GetElderInformationByChildIdAsync(string childId)
+		[HttpGet("by-child/{id}")]
+		public async Task<IActionResult> GetElderInformationByChildIdAsync(string id)
 		{
-			var result = await _elderInformationService.GetElderInformationByChildIdAsync(childId);
+			var result = await _elderInformationService.GetElderInformationByChildIdAsync(id);
 			return Ok(result);
 		}
 		#endregion
 
 		#region Update Elder Information
-		[HttpPut("update-elder-information/{id}")]
+		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateElderInformationAsync(int id, ElderInformationUpdateModel elderInformationUpdateModel)
 		{
 			var result = await _elderInformationService.UpdateElderInformationAsync(id, elderInformationUpdateModel);

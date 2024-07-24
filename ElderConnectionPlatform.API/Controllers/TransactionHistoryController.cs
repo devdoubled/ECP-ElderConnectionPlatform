@@ -18,12 +18,12 @@ namespace ElderConnectionPlatform.API.Controllers
             _transactionHistoryService = transactionHistoryService;
         }
 
-        [HttpGet("get-all-transaction-history-by-account/{accountId}")]
+        [HttpGet("by-account/{id}")]
         public async Task<IActionResult> GetAllTransactionHistoryByAccountId
-            (string accountId, int pageIndex = 0, int pageSize = 10)
+            (string id, int pageIndex = 0, int pageSize = 10)
         {
             var result = await _transactionHistoryService
-                .GetAllTransactionHistoryByAccountIdAsync(accountId, pageIndex, pageSize);
+                .GetAllTransactionHistoryByAccountIdAsync(id, pageIndex, pageSize);
             return Ok(result);
         }
     }
