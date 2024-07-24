@@ -12,6 +12,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Security.Claims;
+using Domain.Enums.AccountEnums;
 
 namespace ElderConnectionPlatform.API
 {
@@ -113,6 +115,22 @@ namespace ElderConnectionPlatform.API
                 opt => opt.SignIn.RequireConfirmedEmail = true
                 );
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CustomerPolicy", policy =>
+                    policy.RequireClaim(ClaimTypes.Role, RoleAccountModel.Customer.ToString()));
+
+                options.AddPolicy("AdminPolicy", policy =>
+                    policy.RequireClaim(ClaimTypes.Role, RoleAccountModel.Connector.ToString()));
+                
+                options.AddPolicy("AdminPolicy", policy =>
+                policy.RequireClaim(ClaimTypes.Role, RoleAccountModel.Customer.ToString()));
+
+                options.AddPolicy("AdminOrStaffPolicy", policy =>
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c =>
+                            (c.Type == ClaimTypes.Role && (c.Value == "1" || c.Value == "2")))));
+            });
 
         }
     }

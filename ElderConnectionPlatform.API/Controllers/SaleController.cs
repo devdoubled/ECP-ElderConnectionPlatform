@@ -6,6 +6,7 @@ using Application.ResponseModels;
 using Application.ViewModels.SaleViewModels;
 using Application.Services;
 using Infracstructures.Mappers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ElderConnectionPlatform.API.Controllers
 {
@@ -45,7 +46,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Get All Sale
 		[HttpGet("get-all-sale")]
-		public async Task<IActionResult> GetAllSaleAsync(int pageIndex = 0, int pageSize = 10)
+        [Authorize("CustomerPolicy")]
+        public async Task<IActionResult> GetAllSaleAsync(int pageIndex = 0, int pageSize = 10)
 		{
 			var result = await _saleService.GetAllSaleAsync(pageIndex, pageSize);
 			return Ok(result);
@@ -54,7 +56,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Get Sale by Id
 		[HttpGet("get-sale-by-id/{saleId}")]
-		public async Task<IActionResult> GetSaleByIdAsync(int saleId)
+        [Authorize]
+        public async Task<IActionResult> GetSaleByIdAsync(int saleId)
 		{
 			var result = await _saleService.GetSaleByIdAsync(saleId);
 			return Ok(result);
