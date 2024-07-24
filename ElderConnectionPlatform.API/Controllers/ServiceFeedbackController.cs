@@ -1,5 +1,6 @@
 ﻿using Application.IRepositories;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,20 +17,23 @@ namespace ElderConnectionPlatform.API.Controllers
 			_serviceFeedbackRepository = serviceFeedbackRepository;
 		}
 
-		//[HttpGet("{serviceFeedbackId}")]
-		//public async Task<IActionResult> GetFeedbackByServiceIdAsync(int serviceFeedbackId)
-		//{
-		//	var response = await _serviceFeedbackRepository.GetFeedbackByServiceIdAsync(serviceFeedbackId);
-		//	return Ok(response);
-		//}
+        //[HttpGet("{serviceFeedbackId}")]
+        //public async Task<IActionResult> GetFeedbackByServiceIdAsync(int serviceFeedbackId)
+        //{
+        //	var response = await _serviceFeedbackRepository.GetFeedbackByServiceIdAsync(serviceFeedbackId);
+        //	return Ok(response);
+        //}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetFeedbackByServiceIdAsync(int id, int pageIndex = 0, int pageSize = 10)
+        #region Get Feedback by Service Id
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetFeedbackByServiceIdAsync(int id, int pageIndex = 0, int pageSize = 10)
 		{
 			var response = await _serviceFeedbackRepository
 				.GetFeedbackByServiceIdPaginationAsync(id, pageIndex, pageSize);
 			return Ok(response);
 		}
+        #endregion
 
-	}
+    }
 }

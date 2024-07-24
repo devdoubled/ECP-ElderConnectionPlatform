@@ -4,6 +4,7 @@ using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.JobScheduleViewModels;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,8 @@ namespace ElderConnectionPlatform.API.Controllers
         //    return Ok(jobSchedules);
         //}
 
-        [HttpGet("")]
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllTrainingProgramAsync(int pageIndex = 0, int pageSize = 10)
         {
             var result = await _jobScheduleService.GetAllJobScheduleAsync(pageIndex, pageSize);
@@ -35,6 +37,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize("ConnectorPolicy")]
         public async Task<ActionResult<JobScheduleViewModel>> GetJobScheduleById(int id)
         {
             var jobSchedule = await _jobScheduleService.GetJobScheduleByIdAsync(id);
@@ -46,6 +49,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         [HttpGet("by-connector/{id}")]
+        [Authorize("ConnectorPolicy")]
         public async Task<IActionResult> GetAllJobScheduleByConnectorId
             (string id, int pageIndex = 0, int pageSize = 10)
         {
@@ -59,6 +63,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         [HttpGet("task-progress/{id}")]
+        [Authorize("ConnectorPolicy")]
         public async Task<IActionResult> GetJobScheduleTaskProgress(int id)
         {
             var jobSchedule = await _jobScheduleService.GetJobScheduleProcessAsync(id);

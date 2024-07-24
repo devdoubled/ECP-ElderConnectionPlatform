@@ -4,6 +4,7 @@ using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.AddressViewModels;
 using Application.ViewModels.ConnectorInfoViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         [HttpPost("become-connector")]
+        [Authorize]
         public async Task<IActionResult> ApplyBecomConnectorAsync(string accountId, ApplyModel model)
         {
             try

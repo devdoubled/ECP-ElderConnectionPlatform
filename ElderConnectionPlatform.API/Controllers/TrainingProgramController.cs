@@ -3,6 +3,7 @@ using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.TrainingProgramViewModels;
 using Infracstructures.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,8 +22,9 @@ namespace ElderConnectionPlatform.API.Controllers
 
 
 		#region Get All Training Program
-		[HttpGet("")]
-		public async Task<IActionResult> GetAllTrainingProgramAsync(int pageIndex = 0, int pageSize = 10)
+		[HttpGet]
+        [Authorize("ConnectorPolicy")]
+        public async Task<IActionResult> GetAllTrainingProgramAsync(int pageIndex = 0, int pageSize = 10)
 		{
 			var result = await _trainingProgramService.GetAllTrainingProgramAsync(pageIndex, pageSize);
 			return Ok(result);
@@ -31,6 +33,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get Training Program Detail By Id
         [HttpGet("{id}")]
+        [Authorize("ConnectorPolicy")]
         public async Task<IActionResult> GetTrainingProgramDetailByIdAsync(int id)
         {
             var result = await _trainingProgramService.GetTrainingProgramDetailAsync(id);
@@ -39,8 +42,9 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Create Training Program
-        [HttpPost("")]
-		public async Task<IActionResult> CreatedTrainingProgramAsync(TrainingProgramAddModel trainingProgramAddModel)
+        [HttpPost]
+        [Authorize("ConnectorPolicy")]
+        public async Task<IActionResult> CreatedTrainingProgramAsync(TrainingProgramAddModel trainingProgramAddModel)
 		{
 			try
 			{
@@ -62,7 +66,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Update Training Program By Id
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateTrainingProgramByIdAsync(int id, TrainingProgramUpdateModel trainingProgramUpdateModel)
+        [Authorize("ConnectorPolicy")]
+        public async Task<IActionResult> UpdateTrainingProgramByIdAsync(int id, TrainingProgramUpdateModel trainingProgramUpdateModel)
 		{
 			var result = await _trainingProgramService.UpdateTrainingProgramAsync(id, trainingProgramUpdateModel);
 			return Ok(result);
@@ -71,7 +76,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Remove Training Program By Id
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> RemoveTrainingProgramIdByIdAsync(int id)
+        [Authorize("AdminPolicy")]
+        public async Task<IActionResult> RemoveTrainingProgramIdByIdAsync(int id)
 		{
 			var result = await _trainingProgramService.RemoveTrainingProgramAsync(id);
 			return Ok(result);

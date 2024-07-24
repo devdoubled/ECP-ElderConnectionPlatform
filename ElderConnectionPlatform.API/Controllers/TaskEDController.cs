@@ -6,6 +6,7 @@ using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.TaskEDViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ElderConnectionPlatform.API.Controllers
 {
@@ -49,6 +50,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get task by id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetTaskById(int id)
         {
             try
@@ -70,6 +72,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get all task by job schedule id
         [HttpGet("by-schedule/{id}")]
+        [Authorize("ConnectorPolicy")]
         public async Task<IActionResult> GetAllTaskByJobScheduleId
             (int id, int pageIndex = 0, int pageSize = 10)
         {
@@ -83,6 +86,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Update task status
         [HttpPut("{id}")]
+        [Authorize("ConnectorPolicy")]
         public async Task<IActionResult> UpdateTaskStatus(int id, TaskEDUpdateViewModel taskEDUpdateViewModel)
         {
             var taskED = await _taskEDService.UpdateTaskEDStatus(id, taskEDUpdateViewModel);

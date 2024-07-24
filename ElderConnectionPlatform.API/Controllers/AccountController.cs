@@ -3,6 +3,7 @@ using Application.IServices;
 using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.AccountViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,8 @@ namespace ElderConnectionPlatform.API.Controllers
             _accountService = accountService;
         }
         #region Get list account
-        [HttpGet("")]
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetLisAccountt(int pageIndex = 0, int pageSize = 10)
         {
             try
@@ -55,6 +57,7 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Detail
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> Detail(string id)
         {
@@ -64,6 +67,7 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Get wallet balance
+        [Authorize]
         [HttpGet("wallet-balance/{id}")]
         public async Task<IActionResult> GetWalletBalance(string id)
         {
@@ -74,6 +78,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Update
         [HttpPut("detail/{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateProfile(string id, [FromBody] AccountUpdateModel model)
         {
             var user = await _accountService.UpdateUserDetailASync(id, model);
@@ -95,6 +100,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Active or Inactive account
         [HttpPut("status/{id}")]
+        [Authorize("AdminPolicy")]
         public async Task<IActionResult> ActiveOrInactiveAccount(string id)
         {
             var result = await _accountService.ActiveOrInactiveAccount(id);

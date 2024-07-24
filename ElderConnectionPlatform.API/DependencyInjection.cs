@@ -21,80 +21,80 @@ namespace ElderConnectionPlatform.API
     {
         public static void AddWebAPIService(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            //services.AddControllers().AddJsonOptions(x =>
+            //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-            services.AddControllers().AddNewtonsoftJson(o =>
-            {
-                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //services.AddControllers().AddNewtonsoftJson(o =>
+            //{
+            //    o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
-            });
+            //});
 
-            services.AddEndpointsApiExplorer();
+            //services.AddEndpointsApiExplorer();
 
-            //add cors
-            services.AddCors(options =>
-            {
-                options.AddPolicy("app-cors",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .WithExposedHeaders("X-Pagination")
-                        .AllowAnyMethod();
-                    });
-            });
+            ////add cors
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("app-cors",
+            //        builder =>
+            //        {
+            //            builder.AllowAnyOrigin()
+            //            .AllowAnyHeader()
+            //            .WithExposedHeaders("X-Pagination")
+            //            .AllowAnyMethod();
+            //        });
+            //});
 
-            //config authen swagger
-            services.AddSwaggerGen(opt =>
-            {
-                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Elder Connection Platform", Version = "v.10.24" });
-                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
-            });
+            ////config authen swagger
+            //services.AddSwaggerGen(opt =>
+            //{
+            //    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Elder Connection Platform", Version = "v.10.24" });
+            //    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            //    {
+            //        In = ParameterLocation.Header,
+            //        Description = "Please enter token",
+            //        Name = "Authorization",
+            //        Type = SecuritySchemeType.Http,
+            //        BearerFormat = "JWT",
+            //        Scheme = "Bearer"
+            //    });
+            //    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            //    {
+            //        {
+            //            new OpenApiSecurityScheme
+            //            {
+            //                Reference = new OpenApiReference
+            //                {
+            //                    Type=ReferenceType.SecurityScheme,
+            //                    Id="Bearer"
+            //                }
+            //            },
+            //            Array.Empty<string>()
+            //        }
+            //    });
+            //});
 
-            // Add Authentication and JwtBearer
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.SaveToken = true;
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-                        ValidAudience = builder.Configuration["JWT:ValidAudience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
-                    };
-                });
+            //// Add Authentication and JwtBearer
+            //services
+            //    .AddAuthentication(options =>
+            //    {
+            //        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    })
+            //    .AddJwtBearer(options =>
+            //    {
+            //        options.SaveToken = true;
+            //        options.RequireHttpsMetadata = false;
+            //        options.TokenValidationParameters = new TokenValidationParameters()
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
+            //            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+            //            ValidAudience = builder.Configuration["JWT:ValidAudience"],
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
+            //        };
+            //    });
 
             // Add Identity
             services
@@ -114,23 +114,6 @@ namespace ElderConnectionPlatform.API
             services.Configure<IdentityOptions>(
                 opt => opt.SignIn.RequireConfirmedEmail = true
                 );
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CustomerPolicy", policy =>
-                    policy.RequireClaim(ClaimTypes.Role, RoleAccountModel.Customer.ToString()));
-
-                options.AddPolicy("AdminPolicy", policy =>
-                    policy.RequireClaim(ClaimTypes.Role, RoleAccountModel.Connector.ToString()));
-                
-                options.AddPolicy("AdminPolicy", policy =>
-                policy.RequireClaim(ClaimTypes.Role, RoleAccountModel.Customer.ToString()));
-
-                options.AddPolicy("AdminOrStaffPolicy", policy =>
-                    policy.RequireAssertion(context =>
-                        context.User.HasClaim(c =>
-                            (c.Type == ClaimTypes.Role && (c.Value == "1" || c.Value == "2")))));
-            });
 
         }
     }

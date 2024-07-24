@@ -17,7 +17,8 @@ namespace ElderConnectionPlatform.API.Controllers
             _registrationProgramService = registrationProgramService;
         }
 
-        [HttpPost()]
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Apply(TrainingProgramApplyViewModel request)
         {
             if (!ModelState.IsValid)

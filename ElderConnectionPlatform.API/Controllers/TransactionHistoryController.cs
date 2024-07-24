@@ -1,6 +1,7 @@
 ﻿using Application;
 using Application.IServices;
 using Application.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElderConnectionPlatform.API.Controllers
@@ -19,6 +20,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         [HttpGet("by-account/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetAllTransactionHistoryByAccountId
             (string id, int pageIndex = 0, int pageSize = 10)
         {

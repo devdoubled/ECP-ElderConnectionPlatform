@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
 using Application.Exceptions;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ElderConnectionPlatform.API.Controllers
 {
@@ -25,6 +26,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
         #region Get post by id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetPostById(int id)
         {
             try
@@ -46,6 +48,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get post by customer id
         [HttpGet("by-customer/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetPostByCustomerId(string id, int pageIndex = 0, int pageSize = 10)
         {
             var posts = await _postService.GetAllPostByCustomerIdAsync(id, pageIndex, pageSize);
@@ -58,6 +61,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get all posts
         [HttpGet("status")]
+        [Authorize]
         public async Task<IActionResult> GetAllPostsByStatus(int status, int pageIndex = 0, int pageSize = 10)
         {
             var posts = await _postService.GetAllPostListByStatusPaginationAsync(status, pageIndex, pageSize);
@@ -69,6 +73,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Check if post is expired
         [HttpGet("check-post-expired/{id}")]
+        [Authorize]
         public async Task<IActionResult> CheckPostExpired(int id)
         {
             var result = await _postService.CheckIfPostIsexpired(id);
@@ -79,7 +84,8 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Create post
-        [HttpPost()]
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest request)
         {
             try
@@ -103,6 +109,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Apply post
         [HttpPost("apply-post/{id}")]
+        [Authorize]
         public async Task<IActionResult> ApplyPost(int id, [Required] string connectorId)
         {
             try
@@ -126,6 +133,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Update post by id
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdatePost(int id,
             [FromBody] UpdatePostRequest request)
         {
@@ -139,6 +147,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Delete post
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeletePost(int id)
         {
             var result = await _postService.DeletePostAsync(id);

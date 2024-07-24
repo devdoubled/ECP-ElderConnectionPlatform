@@ -3,6 +3,7 @@ using Application.IServices;
 using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.AccountViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get Service Type By Id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetServiceTypeById(int id)
         {
             var result = await _serviceTypeService.GetServiceTypeByIdAsync(id);

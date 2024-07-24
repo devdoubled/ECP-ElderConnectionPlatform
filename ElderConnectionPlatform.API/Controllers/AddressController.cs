@@ -4,6 +4,7 @@ using Application.IServices;
 using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.AddressViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
@@ -24,6 +25,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
         #region Get Account Address By Account Id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetServiceTypeById(string id, int pageSize = 10, int pageIndex = 0)
         {
             var result = await _addressService.GetAccountAddressByAccountIdAsync(id, pageSize, pageIndex);
@@ -32,7 +34,8 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Create account address
-        [HttpPost()]
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreatedAddress(AddressAddModel addressAddModel)
         {
             try
@@ -56,6 +59,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Update Account Address By Id
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateAccountAddressAsync(int id, AddressUpdateModel addressUpdateModel)
         {
             var result = await _addressService.UpdateAccountAddressAsync(id, addressUpdateModel);
@@ -65,6 +69,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Delete Account Address By Id
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteAccountAddressAsync(int id)
         {
             var result = await _addressService.DeleteccountAddressAsync(id);

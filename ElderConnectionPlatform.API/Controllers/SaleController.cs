@@ -22,7 +22,8 @@ namespace ElderConnectionPlatform.API.Controllers
 		}
 
         #region Get All Sale
-        [HttpGet()]
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllSaleAsync(int pageIndex = 0, int pageSize = 10)
         {
             var result = await _saleService.GetAllSaleAsync(pageIndex, pageSize);
@@ -32,6 +33,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get Sale by Id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetSaleByIdAsync(int id)
         {
             var result = await _saleService.GetSaleByIdAsync(id);
@@ -40,8 +42,9 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Create sale
-        [HttpPost()]
-		public async Task<IActionResult> CreatedSaleAsync(SaleAddModel saleAddModel)
+        [HttpPost]
+        [Authorize("AdminPolicy")]
+        public async Task<IActionResult> CreatedSaleAsync(SaleAddModel saleAddModel)
 		{
 			try
 			{
@@ -64,7 +67,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Update Sale By Id
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateSaleByIdAsync(int id, SaleUpdateModel saleUpdateModel)
+        [Authorize("AdminPolicy")]
+        public async Task<IActionResult> UpdateSaleByIdAsync(int id, SaleUpdateModel saleUpdateModel)
 		{
 			var result = await _saleService.UpdateSaleAsync(id, saleUpdateModel);
 			return Ok(result);
@@ -73,7 +77,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Remove Sale By Id
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> RemoveSaleByIdAsync(int id)
+        [Authorize("AdminPolicy")]
+        public async Task<IActionResult> RemoveSaleByIdAsync(int id)
 		{
 			var result = await _saleService.RemoveSaleAsync(id);
 			return Ok(result);

@@ -3,6 +3,8 @@ using Application.Exceptions;
 using Application.IServices;
 using Application.ResponseModels;
 using Application.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +24,9 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         #region Get List Service
-        [HttpGet("")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetListService(int pageIndex = 0, int pageSize = 10)
         {
             try
@@ -59,6 +63,7 @@ namespace ElderConnectionPlatform.API.Controllers
 
         #region Get Service By Id
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetServiceTypeById(int id)
         {
             var result = await _serviceService.GetServiceById(id);

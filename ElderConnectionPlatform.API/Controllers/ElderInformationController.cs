@@ -1,5 +1,6 @@
 ﻿using Application.IServices;
 using Application.ViewModels.ElderInformationViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Get Elder Information by Child Id
 		[HttpGet("by-child/{id}")]
-		public async Task<IActionResult> GetElderInformationByChildIdAsync(string id)
+        [Authorize]
+        public async Task<IActionResult> GetElderInformationByChildIdAsync(string id)
 		{
 			var result = await _elderInformationService.GetElderInformationByChildIdAsync(id);
 			return Ok(result);
@@ -27,7 +29,8 @@ namespace ElderConnectionPlatform.API.Controllers
 
 		#region Update Elder Information
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateElderInformationAsync(int id, ElderInformationUpdateModel elderInformationUpdateModel)
+        [Authorize]
+        public async Task<IActionResult> UpdateElderInformationAsync(int id, ElderInformationUpdateModel elderInformationUpdateModel)
 		{
 			var result = await _elderInformationService.UpdateElderInformationAsync(id, elderInformationUpdateModel);
 			return Ok();

@@ -1,5 +1,6 @@
 ﻿using Application.IServices;
 using Application.ViewModels.ConnectorFeedbackViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,13 +25,15 @@ namespace ElderConnectionPlatform.API.Controllers
 		//}
 
 		[HttpGet("{id}")]
-		public async Task<IActionResult> GetFeedbackViewModelAsync(string id, int pageIndex = 0, int pageSize = 10)
+        [Authorize]
+        public async Task<IActionResult> GetFeedbackViewModelAsync(string id, int pageIndex = 0, int pageSize = 10)
 		{
 			var response = await _connectorFeedbackService.GetFeedbackViewModelPaginationAsync(id, pageIndex, pageSize);
 			return StatusCode(response.Status, response);
 		}
 
         [HttpPost("rate")]
+        [Authorize]
         public async Task<IActionResult> RateConnectorAsync(RateConnectorViewModel rateConnectorViewModel)
         {
             var response = await _connectorFeedbackService.RateConnectorAsync(rateConnectorViewModel);

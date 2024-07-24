@@ -3,6 +3,7 @@ using Application.ResponseModels;
 using Application.Services;
 using Application.ViewModels.FavoriteListViewModels;
 using Application.ViewModels.JobScheduleViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         [HttpGet("by-customer/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetFavoriteListByCustomerId(string id, int pageIndex = 0, int pageSize = 10)
         {
             var favorites = await _favoriteService.GetFavoriteListByCustomerIdAsync(id, pageIndex, pageSize);
@@ -39,6 +41,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         [HttpPost()]
+        [Authorize]
         public async Task<IActionResult> CreateFavoriteList(FavoriteListCreateViewModel favoriteListCreateViewModel)
         {
             var result = await _favoriteService.CreateConnectorToFavoriteListAsync(favoriteListCreateViewModel);
