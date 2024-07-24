@@ -20,25 +20,25 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
 
-        [HttpGet("get-favorite-list/{favoriteId}")]
-        public async Task<IActionResult> GetFavoriteListById(int favoriteId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetFavoriteListById(int id)
         {
-            var favorite = await _favoriteService.GetFavoriteListByIdAsync(favoriteId);
+            var favorite = await _favoriteService.GetFavoriteListByIdAsync(id);
             return favorite == null
                ? NotFound()
                : Ok(favorite);
         }
 
-        [HttpGet("get-favorite-list-by-customer-id/{customerId}")]
-        public async Task<IActionResult> GetFavoriteListByCustomerId(string customerId, int pageIndex = 0, int pageSize = 10)
+        [HttpGet("by-customer/{id}")]
+        public async Task<IActionResult> GetFavoriteListByCustomerId(string id, int pageIndex = 0, int pageSize = 10)
         {
-            var favorites = await _favoriteService.GetFavoriteListByCustomerIdAsync(customerId, pageIndex, pageSize);
+            var favorites = await _favoriteService.GetFavoriteListByCustomerIdAsync(id, pageIndex, pageSize);
             return favorites == null
                ? NotFound()
                : Ok(favorites);
         }
 
-        [HttpPost("create-favorite-list")]
+        [HttpPost()]
         public async Task<IActionResult> CreateFavoriteList(FavoriteListCreateViewModel favoriteListCreateViewModel)
         {
             var result = await _favoriteService.CreateConnectorToFavoriteListAsync(favoriteListCreateViewModel);

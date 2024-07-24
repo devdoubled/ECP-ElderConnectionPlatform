@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ElderConnectionPlatform.API.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/service-feedbacks")]
 	[ApiController]
 	public class ServiceFeedbackController : ControllerBase
 	{
@@ -23,11 +23,11 @@ namespace ElderConnectionPlatform.API.Controllers
 		//	return Ok(response);
 		//}
 
-		[HttpGet("{serviceFeedbackId}")]
-		public async Task<IActionResult> GetFeedbackByServiceIdAsync(int serviceFeedbackId, int pageIndex = 0, int pageSize = 10)
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetFeedbackByServiceIdAsync(int id, int pageIndex = 0, int pageSize = 10)
 		{
 			var response = await _serviceFeedbackRepository
-				.GetFeedbackByServiceIdPaginationAsync(serviceFeedbackId, pageIndex, pageSize);
+				.GetFeedbackByServiceIdPaginationAsync(id, pageIndex, pageSize);
 			return Ok(response);
 		}
 

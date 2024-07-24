@@ -22,7 +22,7 @@ namespace ElderConnectionPlatform.API.Controllers
         }
 
         #region Get List Service
-        [HttpGet("list-service-pagination")]
+        [HttpGet("")]
         public async Task<IActionResult> GetListService(int pageIndex = 0, int pageSize = 10)
         {
             try
@@ -58,7 +58,7 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Get Service By Id
-        [HttpGet("get-service/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceTypeById(int id)
         {
             var result = await _serviceService.GetServiceById(id);

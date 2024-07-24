@@ -21,17 +21,25 @@ namespace ElderConnectionPlatform.API.Controllers
 
 
 		#region Get All Training Program
-		[HttpGet("get-all-training-program")]
+		[HttpGet("")]
 		public async Task<IActionResult> GetAllTrainingProgramAsync(int pageIndex = 0, int pageSize = 10)
 		{
 			var result = await _trainingProgramService.GetAllTrainingProgramAsync(pageIndex, pageSize);
 			return Ok(result);
 		}
-		#endregion
+        #endregion
 
+        #region Get Training Program Detail By Id
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTrainingProgramDetailByIdAsync(int id)
+        {
+            var result = await _trainingProgramService.GetTrainingProgramDetailAsync(id);
+            return Ok(result);
+        }
+        #endregion
 
-		#region Create Training Program
-		[HttpPost("create-training-program")]
+        #region Create Training Program
+        [HttpPost("")]
 		public async Task<IActionResult> CreatedTrainingProgramAsync(TrainingProgramAddModel trainingProgramAddModel)
 		{
 			try
@@ -52,32 +60,23 @@ namespace ElderConnectionPlatform.API.Controllers
 		}
 		#endregion
 
-
 		#region Update Training Program By Id
-		[HttpPut("update-training-program/{trainingProgramId}")]
-		public async Task<IActionResult> UpdateTrainingProgramByIdAsync(int trainingProgramId, TrainingProgramUpdateModel trainingProgramUpdateModel)
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateTrainingProgramByIdAsync(int id, TrainingProgramUpdateModel trainingProgramUpdateModel)
 		{
-			var result = await _trainingProgramService.UpdateTrainingProgramAsync(trainingProgramId, trainingProgramUpdateModel);
+			var result = await _trainingProgramService.UpdateTrainingProgramAsync(id, trainingProgramUpdateModel);
 			return Ok(result);
 		}
 		#endregion
 
 		#region Remove Training Program By Id
-		[HttpDelete("remove-training-program/{trainingProgramId}")]
-		public async Task<IActionResult> RemoveTrainingProgramIdByIdAsync(int trainingProgramId)
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> RemoveTrainingProgramIdByIdAsync(int id)
 		{
-			var result = await _trainingProgramService.RemoveTrainingProgramAsync(trainingProgramId);
+			var result = await _trainingProgramService.RemoveTrainingProgramAsync(id);
 			return Ok(result);
 		}
         #endregion
 
-        #region Get Training Program Detail By Id
-        [HttpGet("get-training-program-detail/{trainingProgramId}")]
-        public async Task<IActionResult> GetTrainingProgramDetailByIdAsync(int trainingProgramId)
-        {
-            var result = await _trainingProgramService.GetTrainingProgramDetailAsync(trainingProgramId);
-            return Ok(result);
-        }
-        #endregion
     }
 }

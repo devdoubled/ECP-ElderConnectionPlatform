@@ -22,9 +22,17 @@ namespace ElderConnectionPlatform.API.Controllers
             _unitOfWork = unitOfWork;
             _addressService = addressService;
         }
+        #region Get Account Address By Account Id
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetServiceTypeById(string id, int pageSize = 10, int pageIndex = 0)
+        {
+            var result = await _addressService.GetAccountAddressByAccountIdAsync(id, pageSize, pageIndex);
+            return Ok(result);
+        }
+        #endregion
 
         #region Create account address
-        [HttpPost("create-address")]
+        [HttpPost()]
         public async Task<IActionResult> CreatedAddress(AddressAddModel addressAddModel)
         {
             try
@@ -46,29 +54,20 @@ namespace ElderConnectionPlatform.API.Controllers
         }
         #endregion
 
-        #region Get Account Address By Account Id
-        [HttpGet("get-all-address-by-account/{accountId}")]
-        public async Task<IActionResult> GetServiceTypeById(string accountId, int pageSize = 10, int pageIndex = 0)
-        {
-            var result = await _addressService.GetAccountAddressByAccountIdAsync(accountId, pageSize, pageIndex);
-            return Ok(result);
-        }
-        #endregion
-
         #region Update Account Address By Id
-        [HttpPut("update-account-address/{addressId}")]
-        public async Task<IActionResult> UpdateAccountAddressAsync(int addressId, AddressUpdateModel addressUpdateModel)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAccountAddressAsync(int id, AddressUpdateModel addressUpdateModel)
         {
-            var result = await _addressService.UpdateAccountAddressAsync(addressId, addressUpdateModel);
+            var result = await _addressService.UpdateAccountAddressAsync(id, addressUpdateModel);
             return Ok(result);
         }
         #endregion 
 
         #region Delete Account Address By Id
-        [HttpDelete("delete-account-address/{addressId}")]
-        public async Task<IActionResult> DeleteAccountAddressAsync(int addressId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAccountAddressAsync(int id)
         {
-            var result = await _addressService.DeleteccountAddressAsync(addressId);
+            var result = await _addressService.DeleteccountAddressAsync(id);
             return Ok(result);
         }
         #endregion

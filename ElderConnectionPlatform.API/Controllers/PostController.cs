@@ -23,8 +23,63 @@ namespace ElderConnectionPlatform.API.Controllers
             _unitOfWork = unitOfWork;
             _postService = postService;
         }
+        #region Get post by id
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPostById(int id)
+        {
+            try
+            {
+                var post = await _postService.GetPostByIdAsync(id);
+                return Ok(post);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new FailedResponseModel
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Message = "Bad request.",
+                    Errors = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region Get post by customer id
+        [HttpGet("by-customer/{id}")]
+        public async Task<IActionResult> GetPostByCustomerId(string id, int pageIndex = 0, int pageSize = 10)
+        {
+            var posts = await _postService.GetAllPostByCustomerIdAsync(id, pageIndex, pageSize);
+
+            return posts == null
+                ? throw new NotExistsException()
+                : (IActionResult)Ok(posts);
+        }
+        #endregion
+
+        #region Get all posts
+        [HttpGet("status")]
+        public async Task<IActionResult> GetAllPostsByStatus(int status, int pageIndex = 0, int pageSize = 10)
+        {
+            var posts = await _postService.GetAllPostListByStatusPaginationAsync(status, pageIndex, pageSize);
+
+            return (posts == null) ? NotFound() : Ok(posts);
+
+        }
+        #endregion
+
+        #region Check if post is expired
+        [HttpGet("check-post-expired/{id}")]
+        public async Task<IActionResult> CheckPostExpired(int id)
+        {
+            var result = await _postService.CheckIfPostIsexpired(id);
+            return (result == null)
+                ? NotFound()
+                : Ok(result);
+        }
+        #endregion
+
         #region Create post
-        [HttpPost("create-post")]
+        [HttpPost()]
         public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest request)
         {
             try
@@ -46,79 +101,13 @@ namespace ElderConnectionPlatform.API.Controllers
         }
         #endregion
 
-        #region Delete post
-        [HttpDelete("delete-post/{postId}")]
-        public async Task<IActionResult> DeletePost(int postId)
-        {
-            var result = await _postService.DeletePostAsync(postId);
-            return Ok(result);
-        }
-        #endregion
-
-        #region Update post by id
-        [HttpPut("update-post/{postId}")]
-        public async Task<IActionResult> UpdatePost(int postId,
-            [FromBody] UpdatePostRequest request)
-        {
-            var result = await _postService.UpdatePostAsync(
-                postId,
-                request.PostUpdateViewModel,
-                request.JobScheduleUpdateViewModel);
-            return Ok(result);
-        }
-        #endregion
-
-        #region Get all posts
-        [HttpGet("get-all-posts-by-status")]
-        public async Task<IActionResult> GetAllPostsByStatus(int status, int pageIndex = 0, int pageSize = 10)
-        {
-            var posts = await _postService.GetAllPostListByStatusPaginationAsync(status, pageIndex, pageSize);
-
-            return (posts == null) ? NotFound() : Ok(posts);
-
-        }
-        #endregion
-
-        #region Get post by customer id
-        [HttpGet("get-post-by-customer-id/{customerId}")]
-        public async Task<IActionResult> GetPostByCustomerId(string customerId, int pageIndex = 0, int pageSize = 10)
-        {
-            var posts = await _postService.GetAllPostByCustomerIdAsync(customerId, pageIndex, pageSize);
-
-            return posts == null
-                ? throw new NotExistsException()
-                : (IActionResult)Ok(posts);
-        }
-        #endregion
-
-        #region Get post by id
-        [HttpGet("get-post-by-id/{postId}")]
-        public async Task<IActionResult> GetPostById(int postId)
-        {
-            try
-            {
-                var post = await _postService.GetPostByIdAsync(postId);
-                return Ok(post);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new FailedResponseModel
-                {
-                    Status = StatusCodes.Status400BadRequest,
-                    Message = "Bad request.",
-                    Errors = ex.Message
-                });
-            }
-        }
-        #endregion
-
         #region Apply post
-        [HttpPost("apply-post/{postId}")]
-        public async Task<IActionResult> ApplyPost(int postId, [Required] string connectorId)
+        [HttpPost("apply-post/{id}")]
+        public async Task<IActionResult> ApplyPost(int id, [Required] string connectorId)
         {
             try
             {
-                var result = await _postService.ApplyPost(postId, connectorId);
+                var result = await _postService.ApplyPost(id, connectorId);
                 return (result == null)
                     ? NotFound()
                     : Ok(result);
@@ -135,15 +124,27 @@ namespace ElderConnectionPlatform.API.Controllers
         }
         #endregion
 
-        #region Check if post is expired
-        [HttpGet("check-post-expired/{postId}")]
-        public async Task<IActionResult> CheckPostExpired(int postId)
+        #region Update post by id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePost(int id,
+            [FromBody] UpdatePostRequest request)
         {
-            var result = await _postService.CheckIfPostIsexpired(postId);
-            return (result == null)
-                ? NotFound()
-                : Ok(result);
+            var result = await _postService.UpdatePostAsync(
+                id,
+                request.PostUpdateViewModel,
+                request.JobScheduleUpdateViewModel);
+            return Ok(result);
         }
         #endregion
+
+        #region Delete post
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var result = await _postService.DeletePostAsync(id);
+            return Ok(result);
+        }
+        #endregion
+
     }
 }

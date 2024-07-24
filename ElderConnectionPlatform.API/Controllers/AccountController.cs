@@ -18,18 +18,8 @@ namespace ElderConnectionPlatform.API.Controllers
         {
             _accountService = accountService;
         }
-
-        #region Detail
-        [HttpGet("detail/{id}")]
-        public async Task<IActionResult> Detail(string id)
-        {
-            var user = await _accountService.GetUserDetailAsync(id);
-            return Ok(user);
-        }
-        #endregion
-
         #region Get list account
-        [HttpGet()]
+        [HttpGet("")]
         public async Task<IActionResult> GetLisAccountt(int pageIndex = 0, int pageSize = 10)
         {
             try
@@ -64,17 +54,26 @@ namespace ElderConnectionPlatform.API.Controllers
         }
         #endregion
 
-        #region Get wallet balance
-        [HttpGet("get-wallet-balance/{accountId}")]
-        public async Task<IActionResult> GetWalletBalance(string accountId)
+        #region Detail
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Detail(string id)
         {
-            var result = await _accountService.GetUserWalletBalance(accountId);
+            var user = await _accountService.GetUserDetailAsync(id);
+            return Ok(user);
+        }
+        #endregion
+
+        #region Get wallet balance
+        [HttpGet("wallet-balance/{id}")]
+        public async Task<IActionResult> GetWalletBalance(string id)
+        {
+            var result = await _accountService.GetUserWalletBalance(id);
             return Ok(result);
         }
         #endregion
 
         #region Update
-        [HttpPut("update-account-detail/{id}")]
+        [HttpPut("detail/{id}")]
         public async Task<IActionResult> UpdateProfile(string id, [FromBody] AccountUpdateModel model)
         {
             var user = await _accountService.UpdateUserDetailASync(id, model);
@@ -95,7 +94,7 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Active or Inactive account
-        [HttpPut("active-inactive-account/{id}")]
+        [HttpPut("status/{id}")]
         public async Task<IActionResult> ActiveOrInactiveAccount(string id)
         {
             var result = await _accountService.ActiveOrInactiveAccount(id);

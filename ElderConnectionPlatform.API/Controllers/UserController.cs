@@ -26,6 +26,55 @@ namespace ElderConnectionPlatform.API.Controllers
             _accountService = accountService;
         }
 
+        #region Confirm Email
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string tokenReset, string memberEmail)
+        {
+            try
+            {
+                var result = await _userService.ConfirmEmail(memberEmail, tokenReset);
+                if (result.Status.Equals(false))
+                {
+                    return Unauthorized(result);
+                }
+                var account = await _accountService.GetAccountByEmailAsync(memberEmail);
+                if (account != null)
+                {
+                    return Redirect("https://www.google.com/");
+                }
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest("Confirm email failed!");
+            }
+        }
+        #endregion
+
+        #region Sign in
+        [HttpPost("sign-in")]
+        public async Task<IActionResult> SignIn(SignInModel signInModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await _userService.SignInAccountAsync(signInModel);
+                    if (result.Status.Equals(false))
+                    {
+                        return Unauthorized(result);
+                    }
+                    return Ok(result);
+                }
+                return ValidationProblem(ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
         #region Sign Up Account
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp(AccountSignUpModel accountSignUpModel)
@@ -70,31 +119,6 @@ namespace ElderConnectionPlatform.API.Controllers
         }
         #endregion
 
-        #region Confirm Email
-        [HttpGet("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail(string tokenReset, string memberEmail)
-        {
-            try
-            {
-                var result = await _userService.ConfirmEmail(memberEmail, tokenReset);
-                if (result.Status.Equals(false))
-                {
-                    return Unauthorized(result);
-                }
-                var account = await _accountService.GetAccountByEmailAsync(memberEmail);
-                if (account != null)
-                {
-                    return Redirect("https://www.google.com/");
-                }
-                return Ok(result);
-            }
-            catch
-            {
-                return BadRequest("Confirm email failed!");
-            }
-        }
-        #endregion
-
         #region send email
         [HttpPost("send-email")]
         public async Task<IActionResult> SendEmail([FromForm] EmailRequest email)
@@ -103,30 +127,6 @@ namespace ElderConnectionPlatform.API.Controllers
             {
                 await _mailService.SendEmailAsync(email);
                 return Ok("Test");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        #endregion
-
-        #region Sign in
-        [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn(SignInModel signInModel)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var result = await _userService.SignInAccountAsync(signInModel);
-                    if (result.Status.Equals(false))
-                    {
-                        return Unauthorized(result);
-                    }
-                    return Ok(result);
-                }
-                return ValidationProblem(ModelState);
             }
             catch (Exception ex)
             {

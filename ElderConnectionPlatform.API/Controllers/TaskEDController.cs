@@ -48,12 +48,12 @@ namespace ElderConnectionPlatform.API.Controllers
         //#endregion
 
         #region Get task by id
-        [HttpGet("get-task-by-id/{taskId}")]
-        public async Task<IActionResult> GetTaskById(int taskId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTaskById(int id)
         {
             try
             {
-                var taskED = await _taskEDService.GetTaskEDByIdAsync(taskId);
+                var taskED = await _taskEDService.GetTaskEDByIdAsync(id);
                 return Ok(taskED);
             }
             catch (Exception ex)
@@ -69,11 +69,11 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Get all task by job schedule id
-        [HttpGet("get-all-task-by-job-schedule-id/{jobScheduleId}")]
+        [HttpGet("by-schedule/{id}")]
         public async Task<IActionResult> GetAllTaskByJobScheduleId
-            (int jobScheduleId, int pageIndex = 0, int pageSize = 10)
+            (int id, int pageIndex = 0, int pageSize = 10)
         {
-            var taskEDs = await _taskEDService.GetTaskEDListByJobScheduleIdAsync(jobScheduleId, pageIndex, pageSize);
+            var taskEDs = await _taskEDService.GetTaskEDListByJobScheduleIdAsync(id, pageIndex, pageSize);
 
             return taskEDs == null
                 ? NotFound()
@@ -82,10 +82,10 @@ namespace ElderConnectionPlatform.API.Controllers
         #endregion
 
         #region Update task status
-        [HttpPut("update-task-status/{taskId}")]
-        public async Task<IActionResult> UpdateTaskStatus(int taskId, TaskEDUpdateViewModel taskEDUpdateViewModel)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTaskStatus(int id, TaskEDUpdateViewModel taskEDUpdateViewModel)
         {
-            var taskED = await _taskEDService.UpdateTaskEDStatus(taskId, taskEDUpdateViewModel);
+            var taskED = await _taskEDService.UpdateTaskEDStatus(id, taskEDUpdateViewModel);
             return (taskED == null)
                 ? NotFound()
                 : Ok(taskED);
